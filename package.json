@@ -1,0 +1,38 @@
+{
+  "name": "sketchbook-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "images": "node scripts/build-image-manifest.mjs",
+    "placeholders": "node scripts/make-placeholders.mjs && node scripts/make-grain.mjs && node scripts/build-image-manifest.mjs",
+    "predev": "npm run images",
+    "dev": "next dev",
+    "prebuild": "npm run images",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "framer-motion": "^11.18.2",
+    "gray-matter": "^4.0.3",
+    "next": "^15.5.28",
+    "next-mdx-remote": "^6.0.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "server-only": "^0.0.1",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.6.2",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.5.28",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3"
+  }
+}
