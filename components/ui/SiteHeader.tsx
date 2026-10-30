@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { pages, site } from "@/lib/site";
+import { NameLogo } from "./NameLogo";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -17,12 +18,8 @@ export function SiteHeader() {
         skip to content
       </a>
       <nav aria-label="Main" className="sheet-cols items-baseline pt-5">
-        <Link
-          href="/"
-          className="col-span-2 font-display text-2xl leading-none text-ink md:col-span-3 md:text-[1.7rem]"
-        >
-          {site.firstName}
-          <span className="font-hand text-xl text-marker-ink md:text-2xl"> {site.lastName.toLowerCase()}</span>
+        <Link href="/" aria-label={`${site.name} — home`} className="col-span-2 self-center text-ink md:col-span-3">
+          <NameLogo title="" className="h-8 w-auto md:h-10" />
         </Link>
         <ul className="col-span-2 flex justify-end gap-4 md:col-span-9 md:gap-8">
           {pages.slice(1).map((p) => (

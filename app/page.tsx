@@ -12,6 +12,7 @@ import { TapedPhoto } from "@/components/collage/TapedPhoto";
 import { AdjectiveList } from "@/components/ui/AdjectiveList";
 import { CornerLabels } from "@/components/ui/CornerLabels";
 import { Label } from "@/components/ui/Label";
+import { NameLogo } from "@/components/ui/NameLogo";
 import { ScribbleLink } from "@/components/ui/ScribbleLink";
 import { getImage, ph } from "@/lib/images";
 import { getProjects } from "@/lib/projects";
@@ -34,10 +35,9 @@ export default async function HomePage() {
         <CollageBoard className="md:aspect-[16/10]">
           {/* Name + tagline (top right) */}
           <CollageItem index={0} x="70%" y="2%" w="30%" z={6} eager mobileWidth="100%" align="start">
-            <h1 id="hero-title" className="font-display text-[clamp(3.25rem,6.4vw,6.5rem)] leading-[0.88] text-ink">
-              {site.firstName}
-              <br />
-              <span className="italic">{site.lastName}</span>
+            <h1 id="hero-title" className="text-ink">
+              <NameLogo title="" className="h-auto w-full max-w-[26rem]" />
+              <span className="sr-only">{site.name}</span>
             </h1>
             <p className="mt-4 max-w-[30ch] font-mono text-type text-ink-soft">
               {site.role} — {site.tagline}

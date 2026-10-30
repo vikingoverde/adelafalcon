@@ -2,14 +2,14 @@
  * Site-wide copy and settings. Everything here is placeholder content — edit freely.
  */
 export const site = {
-  name: "Noa Lindqvist",
-  firstName: "Noa",
-  lastName: "Lindqvist",
+  name: "Adela Falcon",
+  firstName: "Adela",
+  lastName: "Falcon",
   role: "fashion & visual designer",
   year: 2026,
   tagline: "makes clothes, keeps scraps, draws tigers on everything.",
   description:
-    "Portfolio of Noa Lindqvist — a fashion and visual designer working between sketchbook, cutting table and screen.",
+    "Portfolio of Adela Falcon — a fashion and visual designer working between sketchbook, cutting table and screen.",
   email: "hello@example.com",
   url: "https://example.com",
   adjectives: ["creative", "curious", "thoughtful", "bold", "playful", "empathetic", "confident", "tactile"],

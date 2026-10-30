@@ -118,6 +118,7 @@ To regenerate the abstract placeholders, run `npm run placeholders`.
   - Solid shapes, like the tiger's brush stripes, get `fill: true` and fade in when their turn comes. The `stripe(x, y, length, angle, width)` helper makes tapered stripes.
   - Any new entry can be used from frontmatter straight away.
 - **Copy** (name, tagline, adjectives, email, socials) is in `lib/site.ts`.
+- **Name logo**: the hand-lettered name in the header and hero is `components/ui/NameLogo.tsx`, a vector traced from `public/brand/name-original.png`. It takes its colour from the surrounding text colour. To change it, trace a new scan to SVG (e.g. Inkscape → Path → Trace Bitmap) and paste the path's `d` and the `viewBox` into that file.
 - **Paper grain** is `public/grain.png`. Regenerate it with `node scripts/make-grain.mjs`, or replace it with any tileable texture.
 
 ## Collage building blocks
