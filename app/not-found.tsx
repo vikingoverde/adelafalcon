@@ -1,22 +1,25 @@
 import Link from "next/link";
-import { LineArt } from "@/components/collage/LineArt";
-import { Note } from "@/components/collage/Note";
-import { CornerLabels } from "@/components/ui/CornerLabels";
+import { Credits } from "@/components/ui/Credits";
 
 export default function NotFound() {
   return (
-    <>
-      <CornerLabels left="lost page" right="?? / ??" />
-      <section className="sheet-cols mt-16 gap-y-8">
-        <h1 className="col-span-4 font-display text-mega md:col-span-8">Torn out.</h1>
-        <LineArt name="cloud" className="col-span-4 w-full max-w-sm md:col-span-4" />
-        <Note className="col-span-4 md:col-span-6" seed="404">
-          this page fell out of the sketchbook —{" "}
-          <Link href="/" className="text-accent-ink underline underline-offset-4">
-            back to the start
-          </Link>
-        </Note>
-      </section>
-    </>
+    <div className="sheet min-h-[70vh] pt-28 md:pt-36">
+      <h1 className="sr-only">Page not found</h1>
+      <Credits axis="52%" mobileAxis="0%" rows={[{ values: ["This scene was cut", "Error 404"] }]} />
+      <Credits
+        className="mt-16"
+        axis="52%"
+        rows={[
+          {
+            label: "Return to",
+            values: (
+              <Link href="/" className="underline underline-offset-4">
+                Index
+              </Link>
+            ),
+          },
+        ]}
+      />
+    </div>
   );
 }

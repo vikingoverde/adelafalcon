@@ -2,37 +2,43 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { pages, site } from "@/lib/site";
-import { NameLogo } from "./NameLogo";
+import { nav, site } from "@/lib/site";
 
+function sectionLabel(pathname: string) {
+  if (pathname === "/") return "Index";
+  if (pathname.startsWith("/work/")) return "Project";
+  return pathname.split("/")[1] ?? "Index";
+}
+
+/** Corner menu: name top-left, current section in brackets top-centre, links top-right. */
 export function SiteHeader() {
   const pathname = usePathname();
-  const isCurrent = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  const isCurrent = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-paper via-paper/85 to-transparent pb-4">
+    <header className="fixed inset-x-0 top-0 z-50 bg-paper">
       <a
         href="#main"
-        className="sr-only z-[100] bg-ink px-3 py-2 font-label text-label uppercase text-paper focus:not-sr-only focus:absolute focus:left-4 focus:top-4"
+        className="sr-only z-[100] bg-red px-3 py-2 text-nav uppercase text-paper focus:not-sr-only focus:absolute focus:left-4 focus:top-3"
       >
-        skip to content
+        Skip to content
       </a>
-      <nav aria-label="Main" className="sheet-cols items-baseline pt-5">
-        <Link href="/" aria-label={`${site.name} — home`} className="col-span-2 self-center text-ink md:col-span-3">
-          <NameLogo title="" className="h-8 w-auto md:h-10" />
+      <nav aria-label="Main" className="sheet grid grid-cols-[1fr_auto] items-baseline py-3 text-nav uppercase md:grid-cols-3">
+        <Link href="/" className="justify-self-start hover:underline hover:underline-offset-4">
+          {site.name}
         </Link>
-        <ul className="col-span-2 flex justify-end gap-4 md:col-span-9 md:gap-8">
-          {pages.slice(1).map((p) => (
-            <li key={p.href}>
+        <p aria-hidden="true" className="hidden justify-self-center md:block">
+          ({sectionLabel(pathname)})
+        </p>
+        <ul className="flex gap-4 justify-self-end md:gap-6">
+          {nav.map((item) => (
+            <li key={item.href}>
               <Link
-                href={p.href}
-                aria-current={isCurrent(p.href) ? "page" : undefined}
-                className="relative py-2 font-label text-label font-medium uppercase text-ink transition-colors hover:text-accent-ink aria-[current=page]:text-accent-ink"
+                href={item.href}
+                aria-current={isCurrent(item.href) ? "page" : undefined}
+                className="underline-offset-4 hover:underline aria-[current=page]:underline"
               >
-                {p.label}
-                {isCurrent(p.href) && (
-                  <span aria-hidden="true" className="absolute -bottom-0.5 left-0 h-px w-full bg-accent-ink" />
-                )}
+                {item.label}
               </Link>
             </li>
           ))}

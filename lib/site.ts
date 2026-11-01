@@ -1,40 +1,38 @@
 /**
- * Site-wide copy and settings. Everything here is placeholder content — edit freely.
+ * Site-wide copy and settings. Most of this is placeholder content — edit freely.
  */
 export const site = {
   name: "Adela Falcon",
-  firstName: "Adela",
-  lastName: "Falcon",
-  role: "fashion & visual designer",
+  role: "Fashion & visual designer",
   year: 2026,
-  tagline: "makes clothes, keeps scraps, draws tigers on everything.",
+  /** One-line intro, used in the home page credits and meta description. */
+  tagline: "Clothes, prints and the visual worlds around them.",
   description:
     "Portfolio of Adela Falcon — a fashion and visual designer working between sketchbook, cutting table and screen.",
   email: "hello@example.com",
   url: "https://example.com",
+  basedIn: "Your city",
   adjectives: ["creative", "curious", "thoughtful", "bold", "playful", "empathetic", "confident", "tactile"],
+  services: ["Capsule & collection design", "Pattern cutting & toiles", "Textile & print design", "Art direction & styling", "Visual identity"],
+  tools: ["Pencil, marker, scissors", "Clo3D", "Illustrator & Photoshop", "Figma", "A very old sewing machine"],
   socials: [
-    { label: "instagram", href: "https://instagram.com/" },
-    { label: "are.na", href: "https://are.na/" },
-    { label: "linkedin", href: "https://linkedin.com/" },
-    { label: "read.cv", href: "https://read.cv/" },
+    { label: "Instagram", href: "https://instagram.com/" },
+    { label: "Are.na", href: "https://are.na/" },
+    { label: "LinkedIn", href: "https://linkedin.com/" },
   ],
 } as const;
 
-/** Top-level pages, in counter order ("01 / 04"). */
-export const pages = [
-  { href: "/", label: "index" },
-  { href: "/work", label: "work" },
-  { href: "/about", label: "about" },
-  { href: "/contact", label: "contact" },
+/** Main menu (top-right corner). The home page is reached through the name, top-left. */
+export const nav = [
+  { href: "/work", label: "Work" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
-export function pageCounter(href: (typeof pages)[number]["href"]) {
-  const i = pages.findIndex((p) => p.href === href);
-  return formatCounter(i + 1, pages.length);
-}
-
+/** "03 / 09" style counters. */
 export function formatCounter(n: number, total: number) {
   const pad = (v: number) => String(v).padStart(2, "0");
   return `${pad(n)} / ${pad(total)}`;
 }
+
+export const pad2 = (n: number) => String(n).padStart(2, "0");

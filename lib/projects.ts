@@ -4,7 +4,6 @@ import path from "node:path";
 import { cache } from "react";
 import matter from "gray-matter";
 import { getImage, type ImageData } from "./images";
-import { drawings, type LineArtName } from "@/components/collage/line-art/drawings";
 
 const DIR = path.join(process.cwd(), "content/projects");
 
@@ -21,12 +20,10 @@ export type ProjectFrontmatter = {
   coverAlt: string;
   gallery: GalleryItem[];
   tags: string[];
-  /** Typewriter paragraph shown on the work index. */
+  /** Short paragraph shown on the work index and at the top of the project page. */
   summary: string;
-  /** Handwritten margin note. */
-  note?: string;
-  /** Which line drawing to draw over the cover. */
-  lineArt?: LineArtName;
+  /** One-line tagline for the project's credits "title card", e.g. "A soft but ferocious capsule". */
+  tagline?: string;
   /** Lower comes first. Falls back to newest year first. */
   order?: number;
 };
@@ -38,7 +35,6 @@ export type Project = ProjectFrontmatter & {
   galleryImages: (ImageData & { alt: string; caption?: string })[];
 };
 
-const LINE_ARTS = Object.keys(drawings) as LineArtName[];
 const HEX = /^#(?:[0-9a-f]{3}){1,2}$/i;
 
 function fail(file: string, msg: string): never {
@@ -77,10 +73,6 @@ function parseFrontmatter(file: string, data: Record<string, unknown>): ProjectF
     };
   });
 
-  const lineArt = str("lineArt", true);
-  if (lineArt && !LINE_ARTS.includes(lineArt as LineArtName))
-    fail(file, `"lineArt" must be one of ${LINE_ARTS.join(", ")}`);
-
   return {
     title,
     year,
@@ -92,8 +84,7 @@ function parseFrontmatter(file: string, data: Record<string, unknown>): ProjectF
     gallery,
     tags: list("tags").map(String),
     summary: str("summary")!,
-    note: str("note", true),
-    lineArt: lineArt as LineArtName | undefined,
+    tagline: str("tagline", true),
     order: typeof data.order === "number" ? data.order : undefined,
   };
 }
@@ -135,7 +126,7 @@ export async function getProject(slug: string) {
 /** The serialisable subset of a project that client components need (no MDX body). */
 export type ProjectCard = Pick<
   Project,
-  "slug" | "title" | "year" | "role" | "client" | "palette" | "summary" | "note" | "lineArt" | "tags" | "coverAlt"
+  "slug" | "title" | "year" | "role" | "client" | "palette" | "summary" | "tagline" | "tags" | "coverAlt"
 > & {
   coverImage: ImageData;
   galleryImages: Project["galleryImages"];
@@ -150,8 +141,7 @@ export function toCard(p: Project, galleryCount = 3): ProjectCard {
     client: p.client,
     palette: p.palette,
     summary: p.summary,
-    note: p.note,
-    lineArt: p.lineArt,
+    tagline: p.tagline,
     tags: p.tags,
     coverAlt: p.coverAlt,
     coverImage: p.coverImage,

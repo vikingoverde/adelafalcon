@@ -1,10 +1,8 @@
-# Sketchbook portfolio
+# Adela Falcon — portfolio
 
-A personal creative portfolio that looks like a designer's sketchbook laid on a tidy editorial grid: polaroids, washi tape, torn paper, paint swatches and marker scribbles, sitting on a faint square grid with tiny red labels, a small red adjective list, flat prints with lots of white space, and a big red line-drawn tiger crawling across the photos.
+A minimal portfolio set like a film's end credits: one red, monospace capitals, small role labels right-aligned against an axis with names to their right, and a home page "reel" of black & white prints that grow, warp and turn to colour as you hover them. The menu sits in the corners.
 
-Built with **Next.js 15 (App Router) · TypeScript (strict) · Tailwind CSS 3 · Framer Motion · MDX** (`next-mdx-remote/rsc`).
-
-All names, copy, images and drawings are original placeholders.
+Built with **Next.js 15 (App Router) · TypeScript (strict) · Tailwind CSS 3 · MDX** (`next-mdx-remote/rsc`). There is almost no client-side JavaScript: the hover effects are CSS.
 
 ```bash
 npm install
@@ -12,144 +10,104 @@ npm run dev        # http://localhost:3000
 npm run build && npm start
 ```
 
-`npm run images` (which runs automatically before `dev` and `build`) scans `/public/images` and writes `lib/image-manifest.json`, which holds each image's size and a tiny blur placeholder for `next/image`.
+`npm run images` runs automatically before `dev` and `build`. It scans `/public/images` and writes `lib/image-manifest.json` with each image's size and a tiny blur placeholder for `next/image`.
 
 ---
 
-## Folder structure
+## Where things live
+
+| To change… | Edit |
+| --- | --- |
+| Name, role, tagline, email, city, socials, services, tools, adjectives | `lib/site.ts` |
+| The colour (one red) and the background | `tailwind.config.ts` → `colors` |
+| The typeface | `app/layout.tsx` (IBM Plex Mono via `next/font`) |
+| A project's text, colours, photos | `content/projects/<name>.mdx` |
+| About page bio and portrait | `app/about/page.tsx` |
+| Home page credits block | `app/page.tsx` |
+| The hand-lettered name | `components/ui/NameLogo.tsx` (traced from `public/brand/name-original.png`) |
 
 ```
-app/                     routes (RSC by default)
-  layout.tsx             fonts, paper backdrop, header, cursor, motion provider
-  template.tsx           paper-slide page transition
-  page.tsx               home / hero collage
-  work/page.tsx          work index (moodboard spreads)
-  work/[slug]/page.tsx   project detail from MDX (generateStaticParams)
+app/                     routes
+  layout.tsx             font, corner menu, footer
+  template.tsx           fade between pages
+  page.tsx               home: image reel + credits
+  work/page.tsx          work index: projects as a cast list with hover previews
+  work/[slug]/page.tsx   project page from MDX (generateStaticParams)
   about/ contact/
-components/collage/      reusable collage pieces
-  Polaroid  TapeStrip  TapedPhoto  TornPaper  Swatch  Scribble  LineArt
-  Note (handwritten)  SketchCard  CollageItem (+ CollageBoard)
-  line-art/drawings.ts   the SVG line drawings (swap these)
-components/ui/           layout + page-level pieces (labels, header, cursor, spreads, pager…)
+components/ui/
+  SiteHeader.tsx         corner menu (name · (section) · links)
+  SiteFooter.tsx         bottom corners
+  Credits.tsx            the end-credits block
+  ImageStrip.tsx         the home page reel (+ WheelScroll.tsx so a mouse wheel scrolls it)
+  Photo.tsx              next/image with blur placeholder, optional black & white
+  NameLogo.tsx           the hand-lettered name as an SVG
 content/projects/*.mdx   one file per project
-lib/                     site copy, project loader, image manifest, seeded randomness, hooks
-public/images/           your images (placeholders live in public/images/placeholder)
-scripts/                 image manifest, placeholder and grain generators
+lib/                     site copy, project loader, image manifest
+public/images/           your images (placeholders in public/images/placeholder)
+scripts/                 image manifest + placeholder generator
 ```
 
 ---
 
 ## Adding a project
 
-Create `content/projects/my-project.mdx`. The file name becomes the URL (`/work/my-project`).
+Create `content/projects/my-project.mdx`. The file name becomes the address (`/work/my-project`).
 
 ```mdx
 ---
 title: My Project
 year: 2026
-role: Concept, styling
+role: Concept, styling          # commas split it into lines in the credits
 client: Someone nice
 order: 4                        # optional: lower comes first (default: newest year first)
-summary: One typewriter paragraph shown on the work index and under the title.
-note: a handwritten margin note  # optional
-lineArt: tigerFull               # optional: tiger | tigerFull | cloud | flower | croquis | blossom | swirl
-palette: ["#F4C6CF", "#7A3B4C", "#A6E22E"]
+tagline: A one-line title card  # optional, shown top-right like a film title
+summary: A short paragraph for the work index and the top of the project page.
+palette: ["#F4C6CF", "#7A3B4C", "#E8333A"]
 tags: [capsule, print]
 cover: /images/my-project/cover.jpg
 coverAlt: "Describe the cover image"
 gallery:
   - src: /images/my-project/01.jpg
     alt: "Describe the image"
-    caption: "toile, week 2"      # optional, shown handwritten
-  - /images/my-project/02.jpg     # short form (alt is generated, so prefer the long form)
+    caption: "toile, week 2"     # shown in the home reel and the process strip
 ---
 
 ## Concept
-Body text is typewriter style. Section headings get numbered automatically.
+Each `##` heading becomes a small label on the left of the axis; the text sits to its right.
 
-<Note>a handwritten aside with a marker arrow</Note>
+<Note>a pull quote, set large in capitals</Note>
 
 ## Colour & Muse
-<Palette />   {/* swatch strip from `palette` */}
-<Muse />      {/* mini collage from the first 3 gallery images */}
+<Palette />   {/* colour blocks from `palette` */}
+<Muse />      {/* three black & white images from the gallery */}
 
 ## Process
-<Process />   {/* horizontal strip of taped gallery images */}
+<Process />   {/* sideways-scrolling strip of the gallery images */}
 
 ## Outcomes
 - bullet points work as normal
 ```
 
-Frontmatter is validated at build time in `lib/projects.ts`. A missing field, a malformed hex colour or an unknown `lineArt` name stops the build with a message naming the file. The work index, page counters ("02 / 09") and previous/next links update by themselves.
-
-The MDX is compiled with `next-mdx-remote` v6, which blocks JavaScript expressions in content by default. Use the components above, not `{…}` expressions.
+The frontmatter is checked at build time in `lib/projects.ts`: a missing field or a malformed colour stops the build with a message naming the file. The home reel, the work list, the credits and the previous/next links all update by themselves. Every cover and gallery image of every project appears in the home reel, in project order.
 
 ---
 
 ## Swapping images
 
-1. Put your files anywhere under `public/images/` (jpg, png, webp or avif).
-2. Point the frontmatter (or the `ph(...)` / `getImage(...)` calls in `app/page.tsx` and `app/about/page.tsx`) at them, e.g. `/images/my-project/cover.jpg`.
-3. Run `npm run images`, or just restart `dev`. Sizes and blur placeholders are generated for you.
+1. Put your files under `public/images/` (jpg, png, webp or avif), e.g. `public/images/my-project/`.
+2. Point the frontmatter (or `getImage(ph("portrait"))` in `app/about/page.tsx`) at them, e.g. `/images/my-project/cover.jpg` — without `public`.
+3. Restart `dev` (or run `npm run images`). Sizes and blur placeholders are generated for you; on Vercel this happens on every build.
 
-Remote images also work: add the host to `images.remotePatterns` in `next.config.ts`. They get a neutral paper-coloured blur instead of a generated one.
+Images are shown black & white in the home reel, the work previews and the Muse grid, and in colour when hovered and on project pages. To change that, remove `bw` from a `<Photo>` or the `filter` rule in `.strip-img` (`app/globals.css`).
 
-To regenerate the abstract placeholders, run `npm run placeholders`.
+## Colour
 
-## Swapping colours, fonts and line art
+There is one colour, `red` (#CC2920), for all text and lines, on `paper` (#F1F0EC). The red is 4.7:1 against the paper, so even the 10px labels stay readable. Change both in `tailwind.config.ts`.
 
-- **Colours** live in `tailwind.config.ts`:
-  - `paper` (#F1F0EC) is the light bone-grey background; `paper.deep` and `paper.white` are the darker and lighter tints used under images and on cards.
-  - `accent` (#E8333A) is the bright red for line art, tiger stripes, the cursor and tape. It is 3.7:1 on the paper colour, which is too light for small text.
-  - `accent.ink` (#CC2920) is the text-safe red for labels, adjectives, links, counters and focus rings (4.7:1 on paper).
-  - `marker` is the pink of the scrapbook notes.
-  - `pastel.*` is reserved for collage pieces.
+## How the pieces work
 
-  `LineArt` and `Scribble` draw with `currentColor`, so changing the tokens recolours every drawing. Tape colours are in `tapeColors` in `TapeStrip.tsx`.
-- **Fonts** are set in `app/layout.tsx` with `next/font/google`:
-  - Instrument Serif for display
-  - IBM Plex Mono for body
-  - Caveat for handwriting
-  - Inter for the tiny labels
-
-  Swap any import and keep the `variable` name.
-- **Line art** is in `components/collage/line-art/drawings.ts`. Export your drawing as SVG, then paste each path's `d` into a new entry with the artboard's `viewBox`.
-  - Outlines are plain strokes. They draw in order, and the stroke weight stays constant at any size.
-  - Solid shapes, like the tiger's brush stripes, get `fill: true` and fade in when their turn comes. The `stripe(x, y, length, angle, width)` helper makes tapered stripes.
-  - Any new entry can be used from frontmatter straight away.
-- **Copy** (name, tagline, adjectives, email, socials) is in `lib/site.ts`.
-- **Name logo**: the hand-lettered name in the header and hero is `components/ui/NameLogo.tsx`, a vector traced from `public/brand/name-original.png`. It takes its colour from the surrounding text colour. To change it, trace a new scan to SVG (e.g. Inkscape → Path → Trace Bitmap) and paste the path's `d` and the `viewBox` into that file.
-- **Paper grain** is `public/grain.png`. Regenerate it with `node scripts/make-grain.mjs`, or replace it with any tileable texture.
-
-## Collage building blocks
-
-| Component | What it does |
-| --- | --- |
-| `<Print image alt label />` | Flat, unframed print for the clean editorial look |
-| `<PosterCard title images />`, `<ScriptCard lines />` | Small zine cover and a handwritten lettering card |
-| `<Polaroid image alt caption seed tape sizes />` | White-bordered print with a handwritten caption and a seeded −6°…6° tilt |
-| `<TapedPhoto image alt seed tape torn />` | Loose photo with tape and optional torn edges |
-| `<TapeStrip position color />` | Semi-transparent washi tape with torn ends. Positions: `tl tr bl br top bottom` |
-| `<TornPaper edges seed>` | Jagged SVG `clip-path` (objectBoundingBox) with a drop shadow |
-| `<Swatch color />`, `<SwatchRow colors />` | Irregular paint dabs |
-| `<Scribble variant />` | Marker strokes that draw in on scroll, or on hover with `trigger="manual"` |
-| `<LineArt name />` | Thin single-colour illustration that draws in on scroll |
-| `<Note>` | Handwritten, tilted annotation |
-| `<CollageBoard>` + `<CollageItem x y w depth draggable>` | Absolute placement on desktop, single-column stack on mobile, plus parallax, drag-and-spring-back and "placed on the table" entry |
-
-Rotations come from a hash of a `seed` string, so they are random-looking but identical on the server and the client (no hydration mismatches).
-
-## The home page
-
-The hero is one editorial "slide": corner labels, the name, the adjective list, a few flat prints, and the big `tigerFull` drawing with small `swirl` and `blossom` ornaments. On desktop everything is placed by percentage on a 16:10 board; edit the `x / y / w` props in `app/page.tsx` to move things. Below it, "From the sketchbook" holds the messier scrapbook collage (polaroids, tape, torn paper, swatches). Both collapse into a single column on mobile.
-
-The grid behind the page has square cells. Its vertical lines line up with the 12 columns, and the row height matches the column pitch (`.paper-grid` in `globals.css`).
-
-## Motion and accessibility notes
-
-- Line drawings animate with pure CSS (`pathLength=1` and `stroke-dashoffset`), triggered by an IntersectionObserver. Under `prefers-reduced-motion` they appear fully drawn.
-- Framer Motion is loaded through `LazyMotion`, so its feature bundle is code-split. Under `prefers-reduced-motion`, `MotionConfig reducedMotion="user"` skips transform animations, and drag and parallax are switched off explicitly. The page wipe is skipped too.
-- The custom cursor only appears on fine-pointer devices. Any element with `data-cursor="view"` (or any other text) turns it into a label.
-- Above-the-fold collage pieces use `eager` so they paint right away instead of fading in, which keeps LCP good.
-- The bright red is too light for small text, so labels, adjectives, links and focus rings use `accent.ink` (#CC2920, 4.7:1 on the paper colour).
-- Project cards are a single stretched link. The visible focus ring sits on the whole spread, and the hover spread-out also triggers on keyboard focus.
+- **Credits** (`components/ui/Credits.tsx`): `rows` of `{ label, values }`. `axis` sets where labels end and names begin (e.g. `"22%"`, `"52%"`); stacking blocks with different axes gives the staggered rhythm of a credits card.
+- **The reel** (`components/ui/ImageStrip.tsx` + `.strip` rules in `globals.css`): on desktop the hovered or keyboard-focused print grows, warps (a CSS `clip-path` that animates between a flat and a "pincushion" polygon), turns to colour and shows its caption; when nothing is hovered, the second print is the large one. On phones it is a swipeable row with captions.
+- **Work previews**: hovering a title on `/work` shows that project's cover on the left; the first one shows by default.
+- **Motion**: page fades and hover transitions are CSS and switch off under `prefers-reduced-motion`.
+- **Accessibility**: one `h1` per page, labelled menus, a skip link, alt text from the frontmatter, visible focus (caption underline in the reel), and colour contrast ≥ 4.5:1.

@@ -1,24 +1,19 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
-import { Label } from "./Label";
 
+/** Bottom corners, mirroring the header. */
 export function SiteFooter() {
   return (
-    <footer className="sheet-cols mt-32 gap-y-6 border-t border-ink/10 pb-10 pt-6">
-      <Label className="col-span-4 md:col-span-3">
-        {site.name} — {site.year}
-      </Label>
-      <p className="col-span-4 font-mono text-type text-ink-soft md:col-span-5">
-        made with paper, tape and too many tabs. all images and drawings are placeholders.
-      </p>
-      <ul className="col-span-4 flex flex-wrap gap-x-5 gap-y-2 md:col-span-4 md:justify-end">
+    <footer className="sheet mt-32 grid grid-cols-1 gap-3 pb-4 pt-6 text-nav uppercase md:grid-cols-3 md:items-end">
+      <Link href="/" className="justify-self-start underline-offset-4 hover:underline">
+        {site.name}
+      </Link>
+      <p className="md:justify-self-center">({site.role})</p>
+      <ul className="flex flex-wrap gap-x-4 gap-y-1 md:justify-self-end md:gap-x-6">
         {site.socials.map((s) => (
           <li key={s.label}>
-            <Link
-              href={s.href}
-              className="font-label text-label font-medium uppercase text-accent-ink underline-offset-4 hover:underline"
-            >
-              {s.label}
+            <Link href={s.href} className="underline-offset-4 hover:underline">
+              {s.label} ↗
             </Link>
           </li>
         ))}

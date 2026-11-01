@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { ReactNode } from "react";
-import { LineArt } from "@/components/collage/LineArt";
-import { Note } from "@/components/collage/Note";
-import { Scribble } from "@/components/collage/Scribble";
-import { TapedPhoto } from "@/components/collage/TapedPhoto";
-import { CornerLabels } from "@/components/ui/CornerLabels";
-import { Label } from "@/components/ui/Label";
-import { MuseBoard } from "@/components/ui/MuseBoard";
-import { PaletteStrip } from "@/components/ui/PaletteStrip";
-import { ProcessGallery } from "@/components/ui/ProcessGallery";
-import { ProjectPager } from "@/components/ui/ProjectPager";
+import { Credits } from "@/components/ui/Credits";
+import { Photo } from "@/components/ui/Photo";
 import { getProject, getProjects } from "@/lib/projects";
-import { formatCounter } from "@/lib/site";
+import { formatCounter, pad2, site } from "@/lib/site";
 
 type Params = { slug: string };
 
@@ -34,107 +27,132 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   };
 }
 
+/** Full-width pieces inside the MDX body span both columns of the credits grid. */
+const full = "md:col-span-2";
+
 export default async function ProjectPage({ params }: { params: Promise<Params> }) {
   const data = await getProject((await params).slug);
   if (!data) notFound();
   const { project: p, index, total, prev, next } = data;
 
-  /** Components available inside the project's MDX file. */
+  /**
+   * Components available inside the project's MDX file. The body is a two-column credits
+   * grid: `## Headings` sit right-aligned in the label column, everything else to the right.
+   */
   const components = {
     h2: ({ children }: { children?: ReactNode }) => (
-      <h2 className="mb-6 mt-20 flex items-baseline gap-4 font-display text-4xl leading-none text-ink first:mt-0 md:text-5xl">
-        <span
-          aria-hidden="true"
-          className="font-label text-label font-medium not-italic text-accent-ink before:content-[counter(section,decimal-leading-zero)] before:[counter-increment:section]"
-        />
-        {children}
-      </h2>
+      <h2 className="pt-4 text-micro uppercase md:col-start-1 md:pt-1 md:text-right">{children}</h2>
     ),
-    p: ({ children }: { children?: ReactNode }) => <p className="mb-5 max-w-[62ch] font-mono text-type">{children}</p>,
+    p: ({ children }: { children?: ReactNode }) => <p className="max-w-[58ch] text-body font-normal md:col-start-2">{children}</p>,
     ul: ({ children }: { children?: ReactNode }) => (
-      <ul className="mb-6 flex max-w-[62ch] flex-col gap-3 font-mono text-type">{children}</ul>
+      <ul className="flex max-w-[58ch] flex-col gap-2 text-body font-normal md:col-start-2">{children}</ul>
     ),
     li: ({ children }: { children?: ReactNode }) => (
-      <li className="relative pl-7 before:absolute before:left-0 before:text-accent-ink before:content-['—']">{children}</li>
+      <li className="relative pl-6 before:absolute before:left-0 before:content-['—']">{children}</li>
     ),
     a: ({ children, href }: { children?: ReactNode; href?: string }) => (
-      <a href={href} className="text-accent-ink underline decoration-1 underline-offset-4">
+      <a href={href} className="underline underline-offset-4">
         {children}
       </a>
     ),
     Note: ({ children }: { children?: ReactNode }) => (
-      <div className="my-8 flex items-center gap-3 md:-ml-16">
-        <Scribble variant="arrow" className="h-8 w-14 shrink-0" />
-        <Note seed={String(children)} tone="marker" size="md">
-          {children}
-        </Note>
+      <p className="py-4 text-credit uppercase md:col-start-2">“{children}”</p>
+    ),
+    Palette: () => (
+      <div className={`${full} grid gap-3 md:grid-cols-[30%_minmax(0,1fr)] md:gap-x-5`}>
+        <p className="pt-1 text-micro uppercase md:text-right">Palette</p>
+        <ul className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+          {p.palette.map((c) => (
+            <li key={c}>
+              <span className="block aspect-[4/5]" style={{ background: c }} />
+              <span className="mt-1.5 block text-micro uppercase">{c}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     ),
-    Palette: () => <PaletteStrip colors={p.palette} />,
-    Process: () => <ProcessGallery items={p.galleryImages} title={p.title} />,
-    Muse: () => <MuseBoard items={p.galleryImages} slug={p.slug} lineArt={p.lineArt} />,
+    Process: () => (
+      <div className={`${full} -mx-4 md:-mx-6`}>
+        <ul
+          tabIndex={0}
+          aria-label={`${p.title} — process images, scroll sideways`}
+          className="no-scrollbar flex snap-x gap-3 overflow-x-auto px-4 md:gap-4 md:px-6"
+        >
+          {p.galleryImages.map((img, i) => (
+            <li key={img.src + i} className="w-[62vw] shrink-0 snap-start sm:w-[36vw] md:w-[22vw]">
+              <Photo image={img} alt={img.alt} aspectClassName="aspect-[3/4]" sizes="(min-width: 768px) 22vw, 62vw" />
+              <p className="mt-2 text-micro uppercase">
+                ({pad2(i + 1)}) {img.caption}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ),
+    Muse: () => (
+      <ul className={`${full} grid grid-cols-3 gap-3 md:ml-[30%] md:gap-4 md:pl-5`}>
+        {p.galleryImages.slice(0, 3).map((img, i) => (
+          <li key={img.src + i}>
+            <Photo image={img} alt={img.alt} aspectClassName="aspect-square" sizes="(min-width: 768px) 20vw, 30vw" bw />
+          </li>
+        ))}
+      </ul>
+    ),
   };
 
   return (
-    <>
-      <CornerLabels left={`project mood — ${p.tags[0] ?? "work"}`} right={formatCounter(index + 1, total)} />
+    <article className="sheet pt-28 md:pt-36">
+      <h1 className="sr-only">{p.title}</h1>
 
-      <header className="sheet-cols mt-8 gap-y-8">
-        <div className="col-span-4 md:col-span-8">
-          <h1 className="font-display text-mega">{p.title}</h1>
-          {p.note && (
-            <Note seed={p.slug + "-h"} rotate={-3} size="lg" tone="marker" className="ml-2 mt-4 md:ml-[12%]">
-              {p.note}
-            </Note>
-          )}
-        </div>
-        <dl className="col-span-4 grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 self-end font-mono text-type md:col-span-4">
-          <Label as="dt">year</Label>
-          <dd>{p.year}</dd>
-          <Label as="dt">role</Label>
-          <dd>{p.role}</dd>
-          <Label as="dt">client</Label>
-          <dd>{p.client}</dd>
-          <Label as="dt">tags</Label>
-          <dd>{p.tags.join(", ")}</dd>
-        </dl>
-      </header>
+      {/* Title card */}
+      <Credits axis="52%" mobileAxis="0%" rows={[{ values: [p.tagline ?? p.role, `${p.title} ${p.year}`] }]} />
 
-      <div className="sheet relative mt-14 md:mt-20">
-        <TapedPhoto
-          image={p.coverImage}
-          alt={p.coverAlt}
-          seed={`${p.slug}-hero`}
-          rotate={-0.8}
-          tape={[
-            { position: "tl", color: "butter" },
-            { position: "tr", color: "blush" },
-          ]}
-          torn={["bottom"]}
-          aspectClassName="aspect-[4/3] md:aspect-[16/8]"
-          sizes="(min-width: 1408px) 1344px, 100vw"
-          priority
-        />
-        {p.lineArt && (
-          <LineArt
-            name={p.lineArt}
-            strokeWidth={2}
-            className="absolute -bottom-[8%] right-[6%] z-20 w-[38%] md:w-[24%]"
-            delay={0.3}
-          />
-        )}
+      <Credits
+        className="mt-12 md:mt-16"
+        axis="22%"
+        rows={[
+          { label: "Project", values: formatCounter(index + 1, total) },
+          { label: "Role", values: p.role.split(/,\s*/) },
+          { label: "Client", values: p.client },
+          { label: "Year", values: String(p.year) },
+          { label: "Tags", values: p.tags },
+        ]}
+      />
+
+      <div className="mt-16 md:mt-24">
+        <Photo image={p.coverImage} alt={p.coverAlt} aspectClassName="aspect-[4/5] md:aspect-[16/8]" sizes="(min-width: 1440px) 1392px, 100vw" priority />
       </div>
 
-      <article className="sheet-cols mt-20 [counter-reset:section] md:mt-28">
-        <p className="col-span-4 mb-16 font-display text-3xl leading-tight md:col-span-8 md:col-start-3 md:text-4xl">
-          {p.summary}
-        </p>
-        <div className="col-span-4 md:col-span-8 md:col-start-3">
-          <MDXRemote source={p.body} components={components} />
-        </div>
-      </article>
+      <div className="mt-16 grid grid-cols-1 gap-y-4 md:mt-24 md:grid-cols-[30%_minmax(0,1fr)] md:gap-x-5 md:gap-y-7">
+        <p className="max-w-[40ch] text-credit uppercase md:col-start-2">{p.summary}</p>
+        <MDXRemote source={p.body} components={components} />
+      </div>
 
-      <ProjectPager prev={prev} next={next} index={index} total={total} />
-    </>
+      {/* Next / previous, as the last lines of the credits */}
+      <nav aria-label="More projects" className="mt-28 md:mt-36">
+        <Credits
+          axis="52%"
+          rows={[
+            {
+              label: `(Previous) ${formatCounter(((index - 1 + total) % total) + 1, total)}`,
+              values: (
+                <Link href={`/work/${prev.slug}`} className="underline-offset-4 hover:underline">
+                  {prev.title}
+                </Link>
+              ),
+            },
+            {
+              label: `(Next) ${formatCounter(((index + 1) % total) + 1, total)}`,
+              values: (
+                <Link href={`/work/${next.slug}`} className="underline-offset-4 hover:underline">
+                  {next.title}
+                </Link>
+              ),
+            },
+            { label: " ", values: `©${site.year} ${site.name}.` },
+          ]}
+        />
+      </nav>
+    </article>
   );
 }
