@@ -34,6 +34,10 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   const data = await getProject((await params).slug);
   if (!data) notFound();
   const { project: p, index, total, prev, next } = data;
+  // Landscape covers (e.g. a mockup photographed flat) are shown whole; portrait ones are cropped to a wide frame.
+  const coverIsLandscape = p.coverImage.width > p.coverImage.height;
+  // Same for the process strip: landscape galleries (spreads, mockups) get a 4:3 frame.
+  const galleryIsLandscape = (p.galleryImages[0]?.width ?? 0) > (p.galleryImages[0]?.height ?? 1);
 
   /**
    * Components available inside the project's MDX file. The body is a two-column credits
@@ -79,8 +83,16 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
           className="no-scrollbar flex snap-x gap-3 overflow-x-auto px-4 md:gap-4 md:px-6"
         >
           {p.galleryImages.map((img, i) => (
-            <li key={img.src + i} className="w-[62vw] shrink-0 snap-start sm:w-[36vw] md:w-[22vw]">
-              <Photo image={img} alt={img.alt} aspectClassName="aspect-[3/4]" sizes="(min-width: 768px) 22vw, 62vw" />
+            <li
+              key={img.src + i}
+              className={`shrink-0 snap-start ${galleryIsLandscape ? "w-[82vw] sm:w-[52vw] md:w-[34vw]" : "w-[62vw] sm:w-[36vw] md:w-[22vw]"}`}
+            >
+              <Photo
+                image={img}
+                alt={img.alt}
+                aspectClassName={galleryIsLandscape ? "aspect-[4/3]" : "aspect-[3/4]"}
+                sizes={galleryIsLandscape ? "(min-width: 768px) 34vw, 82vw" : "(min-width: 768px) 22vw, 62vw"}
+              />
               <p className="mt-2 text-micro uppercase">
                 ({pad2(i + 1)}) {img.caption}
               </p>
@@ -120,7 +132,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
       />
 
       <div className="mt-16 md:mt-24">
-        <Photo image={p.coverImage} alt={p.coverAlt} aspectClassName="aspect-[4/5] md:aspect-[16/8]" sizes="(min-width: 1440px) 1392px, 100vw" priority />
+        <Photo image={p.coverImage} alt={p.coverAlt} aspectClassName={coverIsLandscape ? undefined : "aspect-[4/5] md:aspect-[16/8]"} sizes="(min-width: 1440px) 1392px, 100vw" priority />
       </div>
 
       <div className="mt-16 grid grid-cols-1 gap-y-4 md:mt-24 md:grid-cols-[30%_minmax(0,1fr)] md:gap-x-5 md:gap-y-7">
