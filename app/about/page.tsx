@@ -13,7 +13,7 @@ export default function AboutPage() {
       <h1 className="sr-only">About {site.name}</h1>
 
       <div className="grid grid-cols-1 items-end gap-10 md:grid-cols-[52%_1fr] md:gap-5">
-        <NameLogo title="" className="h-auto w-full max-w-[26rem] md:justify-self-end md:pr-6" />
+        <NameLogo title="" className="h-auto w-full max-w-[26rem] text-ink md:justify-self-end md:pr-6" />
         <p className="text-credit uppercase">
           {site.role}
           <br />

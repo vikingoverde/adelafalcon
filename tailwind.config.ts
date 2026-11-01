@@ -13,6 +13,8 @@ const config: Config = {
       colors: {
         paper: { DEFAULT: "#F1F0EC", deep: "#E5E4DF" },
         red: { DEFAULT: "#CC2920" },
+        /** Black, used only for the hand-lettered name logo. */
+        ink: { DEFAULT: "#111111" },
       },
       fontFamily: {
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],

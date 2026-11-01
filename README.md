@@ -102,7 +102,7 @@ Images are shown black & white in the home reel, the work previews and the Muse 
 
 ## Colour
 
-There is one colour, `red` (#CC2920), for all text and lines, on `paper` (#F1F0EC). The red is 4.7:1 against the paper, so even the 10px labels stay readable. Change both in `tailwind.config.ts`.
+There is one colour, `red` (#CC2920), for all text and lines, on `paper` (#F1F0EC). The only exception is the hand-lettered name, which is `ink` (#111111, black). The red is 4.7:1 against the paper, so even the 10px labels stay readable. Change both in `tailwind.config.ts`.
 
 ## How the pieces work
 
