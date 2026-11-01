@@ -6,7 +6,7 @@ export const site = {
   /** Shown in the footer, the home page corner, the About title and the browser tab. */
   role: "Design & art direction",
   /** The "Discipline" lines in the credits (Home and About). */
-  disciplines: ["Design", "Art direction", "Identity"],
+  disciplines: ["Design", "Art direction", "Content"],
   year: 2026,
   /** One-line intro, used in the home page credits and meta description. */
   tagline: "Clothes, prints and the visual worlds around them.",
