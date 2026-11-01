@@ -27,7 +27,7 @@ export default function AboutPage() {
         </div>
         <div className="max-w-[58ch] space-y-4 text-body font-normal md:pl-0">
           <p>
-            I&rsquo;m a fashion and visual designer who thinks with my hands. Most projects start as a scrap — a torn
+            I&rsquo;m a designer and art director who thinks with my hands. Most projects start as a scrap — a torn
             magazine corner, a fabric offcut, a doodle in the margin — and grow on the wall next to my desk until they
             become clothes, prints or identities.
           </p>
@@ -44,7 +44,7 @@ export default function AboutPage() {
           axis="22%"
           rows={[
             { label: "Designed by", values: site.name },
-            { label: "Discipline", values: ["Fashion", "Print", "Identity"] },
+            { label: "Discipline", values: [...site.disciplines] },
             { label: "Based in", values: site.basedIn },
           ]}
         />

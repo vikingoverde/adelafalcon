@@ -67,7 +67,7 @@ export default async function HomePage() {
             axis="22%"
             rows={[
               { label: "Designed by", values: site.name },
-              { label: "Discipline", values: ["Fashion", "Print", "Identity"] },
+              { label: "Discipline", values: [...site.disciplines] },
               { label: "Based in", values: site.basedIn },
             ]}
           />
