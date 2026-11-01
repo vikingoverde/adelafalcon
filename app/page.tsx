@@ -58,7 +58,7 @@ export default async function HomePage() {
             mobileAxis="0%"
             rows={[
               {
-                values: [site.tagline, `${site.name} ${site.year}`],
+                values: [...site.tagline],
               },
             ]}
           />

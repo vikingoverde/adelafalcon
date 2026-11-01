@@ -8,8 +8,8 @@ export const site = {
   /** The "Discipline" lines in the credits (Home and About). */
   disciplines: ["Design", "Art direction", "Content"],
   year: 2026,
-  /** One-line intro, used in the home page credits and meta description. */
-  tagline: "Clothes, prints and the visual worlds around them.",
+  /** The title card at the top of the home page credits, one entry per line. */
+  tagline: ["I dont want no body calling me", "anything but number one"],
   description:
     "Portfolio of Adela Falcon — design and art direction, between sketchbook, studio and screen.",
   email: "hello@example.com",
