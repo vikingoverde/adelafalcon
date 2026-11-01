@@ -66,7 +66,7 @@ export function Cursor() {
               initial={{ opacity: 0, scale: 0.6 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.6 }}
-              className="font-label text-label-sm font-semibold uppercase text-ink"
+              className="font-label text-label-sm font-semibold uppercase text-paper-white"
             >
               {label}
             </m.span>

@@ -1,6 +1,6 @@
 # Sketchbook portfolio
 
-A personal creative portfolio that looks like a designer's sketchbook laid on a tidy editorial grid: polaroids, washi tape, torn paper, paint swatches and marker scribbles, sitting on a faint square grid with tiny green labels, a small adjective list on highlighter strips, flat prints with lots of white space, and a big fluorescent-green line-drawn tiger crawling across the photos.
+A personal creative portfolio that looks like a designer's sketchbook laid on a tidy editorial grid: polaroids, washi tape, torn paper, paint swatches and marker scribbles, sitting on a faint square grid with tiny red labels, a small red adjective list, flat prints with lots of white space, and a big red line-drawn tiger crawling across the photos.
 
 Built with **Next.js 15 (App Router) · TypeScript (strict) · Tailwind CSS 3 · Framer Motion · MDX** (`next-mdx-remote/rsc`).
 
@@ -100,8 +100,8 @@ To regenerate the abstract placeholders, run `npm run placeholders`.
 
 - **Colours** live in `tailwind.config.ts`:
   - `paper` (#F1F0EC) is the light bone-grey background; `paper.deep` and `paper.white` are the darker and lighter tints used under images and on cards.
-  - `accent` (#8ACE00) is the fluorescent "brat" green for line art, tiger stripes, the cursor, tape, and the highlight behind the adjectives and poster titles. It is only 1.7:1 on the paper colour, so it is never used for text on paper. Black text on top of it is fine (8.7:1).
-  - `accent.ink` (#4B7500) is the text-safe deep green for labels, links, counters and focus rings (4.8:1 on paper).
+  - `accent` (#E8333A) is the bright red for line art, tiger stripes, the cursor and tape. It is 3.7:1 on the paper colour, which is too light for small text.
+  - `accent.ink` (#CC2920) is the text-safe red for labels, adjectives, links, counters and focus rings (4.7:1 on paper).
   - `marker` is the pink of the scrapbook notes.
   - `pastel.*` is reserved for collage pieces.
 
@@ -151,5 +151,5 @@ The grid behind the page has square cells. Its vertical lines line up with the 1
 - Framer Motion is loaded through `LazyMotion`, so its feature bundle is code-split. Under `prefers-reduced-motion`, `MotionConfig reducedMotion="user"` skips transform animations, and drag and parallax are switched off explicitly. The page wipe is skipped too.
 - The custom cursor only appears on fine-pointer devices. Any element with `data-cursor="view"` (or any other text) turns it into a label.
 - Above-the-fold collage pieces use `eager` so they paint right away instead of fading in, which keeps LCP good.
-- Brat green is too light for text on paper, so labels, links and focus rings use `accent.ink` (#4B7500, 4.8:1). Wherever the bright green carries text (adjectives, the poster title, the lettering card), the text is black on a green background.
+- The bright red is too light for small text, so labels, adjectives, links and focus rings use `accent.ink` (#CC2920, 4.7:1 on the paper colour).
 - Project cards are a single stretched link. The visible focus ring sits on the whole spread, and the hover spread-out also triggers on keyboard focus.

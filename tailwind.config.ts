@@ -3,8 +3,8 @@ import plugin from "tailwindcss/plugin";
 
 /**
  * Design tokens. Change colours here and every component follows.
- * - `accent` is fluorescent "brat" green for line art, stripes, cursor, highlights. At 1.7:1 it is far too light for text on paper (ink text ON it is fine: 8.7:1).
- * - `accent-ink` is the text-safe deep green (4.8:1 on paper) for labels, links, counters, focus rings.
+ * - `accent` is the bright red for line art, tiger stripes and the cursor. At 3.7:1 on paper it is too light for small text.
+ * - `accent-ink` is the text-safe red (4.7:1 on paper) for labels, adjectives, links, counters, focus rings.
  * LineArt and Scribble draw with `currentColor`, so changing these two values recolours everything.
  */
 const config: Config = {
@@ -14,7 +14,7 @@ const config: Config = {
       colors: {
         paper: { DEFAULT: "#F1F0EC", deep: "#E5E4DF", white: "#FBFBF9" },
         ink: { DEFAULT: "#1E1E1C", soft: "#5A5650" },
-        accent: { DEFAULT: "#8ACE00", ink: "#4B7500" },
+        accent: { DEFAULT: "#E8333A", ink: "#CC2920" },
         marker: { DEFAULT: "#E2557A", ink: "#C2185B" },
         pastel: {
           blush: "#F4C6CF",

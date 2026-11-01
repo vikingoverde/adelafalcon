@@ -95,7 +95,7 @@ export default function AboutPage() {
             <Polaroid image={getImage(ph("look-16"))} alt="Placeholder: a figure in a stone-coloured coat" caption="grandmother's coat" seed="insp-3" aspect="portrait" sizes="(min-width: 768px) 22vw, 78vw" />
           </CollageItem>
           <CollageItem index={4} x="54%" y="70%" w="30%" z={4} depth={18} align="center" mobileWidth="90%">
-            <SwatchRow colors={["#7A3B4C", "#E89AAE", "#F7D2B8", "#2F4A6B", "#8ACE00"]} size="sm" />
+            <SwatchRow colors={["#7A3B4C", "#E89AAE", "#F7D2B8", "#2F4A6B", "#E8333A"]} size="sm" />
             <Note seed="insp-n" size="sm" className="mt-2">
               colours I keep coming back to
             </Note>

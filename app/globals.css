@@ -14,7 +14,7 @@
     @apply bg-paper font-mono text-ink antialiased;
   }
   ::selection {
-    @apply bg-accent text-ink;
+    @apply bg-accent text-paper-white;
   }
   /* Visible accent focus ring everywhere (keyboard only). */
   :focus-visible {

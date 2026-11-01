@@ -7,7 +7,7 @@ export const tapeColors = {
   sky: "rgba(201, 221, 240, 0.72)",
   mint: "rgba(207, 232, 213, 0.75)",
   lilac: "rgba(220, 207, 234, 0.72)",
-  accent: "rgba(138, 206, 0, 0.5)",
+  accent: "rgba(232, 51, 58, 0.38)",
   kraft: "rgba(214, 196, 166, 0.7)",
 } as const;
 

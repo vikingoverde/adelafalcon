@@ -28,7 +28,7 @@ export default async function HomePage() {
 
       {/*
         The hero is one editorial moodboard "slide": sparse flat prints on the grid, a small
-        adjective list, and a big brat-green line-drawn tiger crawling across everything.
+        adjective list, and a big red line-drawn tiger crawling across everything.
         Desktop positions are percentages of a 16:10 board; on mobile it becomes a single column.
       */}
       <section aria-labelledby="hero-title" className="sheet relative mt-6 md:mt-4">
@@ -174,9 +174,9 @@ export default async function HomePage() {
           </CollageItem>
 
           <CollageItem index={6} x="5%" y="76%" w="30%" z={5} depth={22} align="center" mobileWidth="90%">
-            <SwatchRow colors={["#F4C6CF", "#F6E7A8", "#C9DDF0", "#CFE8D5", "#8ACE00"]} />
+            <SwatchRow colors={["#F4C6CF", "#F6E7A8", "#C9DDF0", "#CFE8D5", "#E8333A"]} />
             <Note seed="sw" rotate={-4} size="sm" tone="accent" className="mt-3">
-              palette for ss27 — keep it soft, one loud green
+              palette for ss27 — keep it soft, one loud red
             </Note>
           </CollageItem>
 

@@ -10,7 +10,7 @@ type Props = {
   className?: string;
 };
 
-/** A small typographic poster/zine cover: tiny header, title on a green band, stacked duotone photos. */
+/** A small typographic poster/zine cover: tiny header, big red title, stacked duotone photos. */
 export function PosterCard({ title, kicker = "the sketchbook", meta, images, sizes, className = "" }: Props) {
   return (
     <figure
@@ -19,7 +19,7 @@ export function PosterCard({ title, kicker = "the sketchbook", meta, images, siz
       <p aria-hidden="true" className="text-center font-mono text-[0.5rem] uppercase tracking-[0.2em] text-ink-soft">{kicker}</p>
       <p
         aria-hidden="true"
-        className="mt-1 bg-accent pb-0.5 pt-1 text-center font-display text-[clamp(1.4rem,2.6vw,2.6rem)] uppercase leading-none tracking-tight text-ink"
+        className="mt-1 text-center font-display text-[clamp(1.4rem,2.6vw,2.6rem)] uppercase leading-none tracking-tight text-accent"
       >
         {title}
       </p>
