@@ -14,7 +14,8 @@ export type ProjectFrontmatter = {
   title: string;
   year: number;
   role: string;
-  client: string;
+  /** Optional: leave out and the "Client" credit is hidden. */
+  client?: string;
   palette: string[];
   cover: string;
   coverAlt: string;
@@ -77,7 +78,7 @@ function parseFrontmatter(file: string, data: Record<string, unknown>): ProjectF
     title,
     year,
     role: str("role")!,
-    client: str("client")!,
+    client: str("client", true),
     palette,
     cover: str("cover")!,
     coverAlt: str("coverAlt", true) ?? `${title} — cover image`,

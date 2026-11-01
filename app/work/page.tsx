@@ -43,13 +43,14 @@ export default async function WorkPage() {
                 {p.title}
               </Link>
               <p className="mt-2 text-micro">
-                {p.role} — {p.client}
+                {p.role}
+                {p.client ? ` — ${p.client}` : ""}
               </p>
             </div>
             <div aria-hidden="true" className="work-preview pointer-events-none absolute left-0 top-0 hidden w-[24%] md:block">
               <Photo image={p.coverImage} alt="" aspectClassName="aspect-[4/5]" sizes="24vw" priority={i === 0} />
               <p className="mt-2 text-micro">
-                ({pad2(i + 1)}) {p.tagline}
+                ({pad2(i + 1)}) {p.tagline ?? p.title}
               </p>
             </div>
           </li>

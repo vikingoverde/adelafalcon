@@ -113,7 +113,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
         rows={[
           { label: "Project", values: formatCounter(index + 1, total) },
           { label: "Role", values: p.role.split(/,\s*/) },
-          { label: "Client", values: p.client },
+          ...(p.client ? [{ label: "Client", values: p.client }] : []),
           { label: "Year", values: String(p.year) },
           { label: "Tags", values: p.tags },
         ]}
