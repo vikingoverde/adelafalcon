@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Credits } from "@/components/ui/Credits";
 import { NameLogo } from "@/components/ui/NameLogo";
-import { Photo } from "@/components/ui/Photo";
 import { SocialIcons } from "@/components/ui/SocialIcons";
-import { getImage, ph } from "@/lib/images";
+import { getImage } from "@/lib/images";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  const portrait = getImage("/images/about/portrait-polaroid-cutout.webp");
   return (
     <div className="sheet pt-28 md:pt-36">
       <h1 className="sr-only">About {site.name}</h1>
@@ -33,13 +34,16 @@ export default function AboutPage() {
         */}
         <figure className="relative aspect-[973/802] w-full">
           <div className="absolute left-[32.9%] top-[24.6%] h-[58.4%] w-[38.5%]">
-            <Photo
-              image={getImage(ph("portrait"))}
-              alt={`Placeholder portrait of ${site.name}`}
-              aspectClassName="h-full w-full"
+            {/* Photo-booth Polaroid, cut out (transparent surround) so it sits straight on the paper. */}
+            <Image
+              src={portrait.src}
+              alt={`${site.name} in a sepia photo-booth Polaroid, lips pursed toward the camera`}
+              fill
               sizes="(min-width: 768px) 22vw, 38vw"
               priority
-              bw
+              placeholder={portrait.blurDataURL ? "blur" : "empty"}
+              blurDataURL={portrait.blurDataURL}
+              className="object-contain"
             />
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element -- static SVG, no optimisation needed */}
@@ -50,10 +54,9 @@ export default function AboutPage() {
           </figcaption>
         </figure>
         <div className="max-w-[56ch] space-y-5 md:pt-6">
-          <p className="text-credit uppercase">
-            Hello, I&rsquo;m Adela Falcón, a multidisciplinary designer fueled by curiosity and ambition.
-          </p>
+          <p className="text-credit uppercase">Hello, I&rsquo;m Adela Falcón</p>
           <div className="space-y-4 text-body font-normal">
+            <p>A multidisciplinary designer fueled by curiosity and ambition.</p>
             <p>
               I was born in Zaragoza, Spain and raised around the world — learning from new cultures and people, and
               inspired by the vibrant connections between different music, cultures, art, architecture and fashion.
