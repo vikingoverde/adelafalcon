@@ -9,6 +9,31 @@ const DIR = path.join(process.cwd(), "content/projects");
 
 export type GalleryItem = { src: string; alt: string; caption?: string };
 
+/**
+ * Per-section media for a project page, placed in the MDX with `<Media name="…" />`.
+ * - single:  one large image, GIF or video (e.g. the box opening)
+ * - row:     a row of images (e.g. three references)
+ * - feature: the first image large, the rest beside it (e.g. a disc cover + interiors)
+ * - video:   a YouTube video (`youtube` = the id or full link)
+ * - book:    a flip-book of pages (desktop) / page slider (phone)
+ * Items without `src` render as labelled "to come" frames; `placeholders: n` adds n blank ones.
+ */
+export type MediaLayout = "single" | "row" | "feature" | "video" | "book";
+export type MediaItemInput = { src?: string; alt?: string; caption?: string };
+export type MediaBlockInput = {
+  layout: MediaLayout;
+  items?: MediaItemInput[];
+  placeholders?: number;
+  youtube?: string;
+  title?: string;
+  caption?: string;
+};
+export type ResolvedMediaItem =
+  | { kind: "image"; image: ImageData; alt: string; caption?: string }
+  | { kind: "video"; src: string; alt: string; caption?: string }
+  | { kind: "placeholder"; caption?: string };
+export type ResolvedMediaBlock = Omit<MediaBlockInput, "items" | "placeholders"> & { items: ResolvedMediaItem[] };
+
 /** Frontmatter as written in content/projects/*.mdx */
 export type ProjectFrontmatter = {
   title: string;
@@ -27,6 +52,8 @@ export type ProjectFrontmatter = {
   tagline?: string;
   /** Lower comes first. Falls back to newest year first. */
   order?: number;
+  /** Optional per-section media, keyed by name (see MediaBlockInput). */
+  media?: Record<string, MediaBlockInput>;
 };
 
 export type Project = ProjectFrontmatter & {
@@ -34,6 +61,7 @@ export type Project = ProjectFrontmatter & {
   body: string;
   coverImage: ImageData;
   galleryImages: (ImageData & { alt: string; caption?: string })[];
+  mediaBlocks: Record<string, ResolvedMediaBlock>;
 };
 
 const HEX = /^#(?:[0-9a-f]{3}){1,2}$/i;
@@ -74,6 +102,27 @@ function parseFrontmatter(file: string, data: Record<string, unknown>): ProjectF
     };
   });
 
+  const LAYOUTS: MediaLayout[] = ["single", "row", "feature", "video", "book"];
+  let media: Record<string, MediaBlockInput> | undefined;
+  if (data.media !== undefined) {
+    if (typeof data.media !== "object" || data.media === null) fail(file, `"media" must be a map of named sections`);
+    media = {};
+    for (const [name, raw] of Object.entries(data.media as Record<string, unknown>)) {
+      const b = raw as Record<string, unknown>;
+      if (!LAYOUTS.includes(b.layout as MediaLayout))
+        fail(file, `media.${name}.layout must be one of ${LAYOUTS.join(", ")}`);
+      if (b.layout === "video" && typeof b.youtube !== "string") fail(file, `media.${name} needs a "youtube" link or id`);
+      media[name] = {
+        layout: b.layout as MediaLayout,
+        items: Array.isArray(b.items) ? (b.items as MediaItemInput[]) : [],
+        placeholders: typeof b.placeholders === "number" ? b.placeholders : 0,
+        youtube: typeof b.youtube === "string" ? b.youtube : undefined,
+        title: typeof b.title === "string" ? b.title : undefined,
+        caption: typeof b.caption === "string" ? b.caption : undefined,
+      };
+    }
+  }
+
   return {
     title,
     year,
@@ -87,7 +136,29 @@ function parseFrontmatter(file: string, data: Record<string, unknown>): ProjectF
     summary: str("summary")!,
     tagline: str("tagline", true),
     order: typeof data.order === "number" ? data.order : undefined,
+    media,
   };
+}
+
+const VIDEO_EXT = /\.(mp4|webm|mov)$/i;
+
+function resolveMedia(title: string, media: Record<string, MediaBlockInput> | undefined) {
+  const out: Record<string, ResolvedMediaBlock> = {};
+  for (const [name, b] of Object.entries(media ?? {})) {
+    const items: ResolvedMediaItem[] = (b.items ?? []).map((it, i) => {
+      if (!it.src) return { kind: "placeholder", caption: it.caption };
+      const alt = it.alt ?? `${title} — ${name} ${i + 1}`;
+      return VIDEO_EXT.test(it.src)
+        ? { kind: "video", src: it.src, alt, caption: it.caption }
+        : { kind: "image", image: getImage(it.src), alt, caption: it.caption };
+    });
+    for (let i = 0; i < (b.placeholders ?? 0); i++) items.push({ kind: "placeholder" });
+    const { items: _items, placeholders: _p, ...rest } = b;
+    void _items;
+    void _p;
+    out[name] = { ...rest, items };
+  }
+  return out;
 }
 
 export const getProjects = cache(async (): Promise<Project[]> => {
@@ -103,6 +174,7 @@ export const getProjects = cache(async (): Promise<Project[]> => {
         body: content,
         coverImage: getImage(fm.cover),
         galleryImages: fm.gallery.map((g) => ({ ...getImage(g.src), alt: g.alt, caption: g.caption })),
+        mediaBlocks: resolveMedia(fm.title, fm.media),
       } satisfies Project;
     }),
   );

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { ReactNode } from "react";
 import { Credits } from "@/components/ui/Credits";
+import { MediaBlock } from "@/components/ui/MediaBlock";
 import { Photo } from "@/components/ui/Photo";
 import { getProject, getProjects } from "@/lib/projects";
 import { formatCounter, pad2, site } from "@/lib/site";
@@ -62,6 +63,16 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
     Note: ({ children }: { children?: ReactNode }) => (
       <p className="py-4 text-credit uppercase md:col-start-2">“{children}”</p>
     ),
+    /** A named media section from the frontmatter's `media` map, e.g. <Media name="tactile" />. */
+    Media: ({ name }: { name?: string }) => {
+      const block = name ? p.mediaBlocks[name] : undefined;
+      if (!block) return null;
+      return (
+        <div className="pb-4 md:col-start-2">
+          <MediaBlock block={block} projectTitle={p.title} />
+        </div>
+      );
+    },
     Palette: () => (
       <div className={`${full} grid gap-3 md:grid-cols-[30%_minmax(0,1fr)] md:gap-x-5`}>
         <p className="pt-1 text-micro uppercase md:text-right">Palette</p>

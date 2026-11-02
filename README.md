@@ -92,6 +92,22 @@ The frontmatter is checked at build time in `lib/projects.ts`: a missing field o
 
 ---
 
+## Media sections (GIFs, videos, a flip-book)
+
+A project can give each section its own media with a `media` map in the frontmatter and `<Media name="…" />` in the body (see `content/projects/el-universo-de-rosalia.mdx`):
+
+```yaml
+media:
+  preludio: { layout: single, items: [{ src: /images/rosalia/box-opening.gif, alt: "…" }] }
+  tactile:  { layout: row, items: [{ src: …, alt: …, caption: "Flamenco textile" }, …] }
+  sound:    { layout: feature, items: [cover, interior, interior, interior] }
+  visual:   { layout: video, youtube: https://www.youtube.com/watch?v=… }
+  coda:     { layout: book, items: [page1, page2, …] }   # or `placeholders: 12` for blank pages
+```
+
+- `single` one large image, GIF or `.mp4`/`.webm` (videos autoplay muted and loop) · `row` images side by side · `feature` first image large, the rest beside it · `video` a YouTube video that only loads when played · `book` a flip-book on desktop (click a page, use the buttons or ← →) and a swipeable slider on phones.
+- An item with no `src` shows as a labelled "to come" frame, so the layout can go live before the images do.
+
 ## Swapping images
 
 1. Put your files under `public/images/` (jpg, png, webp or avif), e.g. `public/images/my-project/`.
