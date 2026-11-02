@@ -24,10 +24,30 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <div className="mt-20 grid grid-cols-1 gap-12 md:mt-28 md:grid-cols-[22%_1fr] md:gap-5">
-        <div className="w-2/3 md:w-full">
-          <Photo image={getImage(ph("portrait"))} alt={`Placeholder portrait of ${site.name}`} aspectClassName="aspect-[4/5]" sizes="(min-width: 768px) 20vw, 66vw" priority bw />
-        </div>
+      <div className="mt-16 grid grid-cols-1 items-start gap-12 md:mt-24 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] md:gap-10">
+        {/*
+          Portrait inside Adela's hand-drawn labels (public/brand/about-labels.svg, traced from
+          about-labels-original.png). The photo sits in the drawing's empty middle, which is
+          32.9% from the left, 24.6% from the top, 38.5% wide and 58.4% tall — all arrows point at it.
+        */}
+        <figure className="relative aspect-[973/802] w-full">
+          <div className="absolute left-[32.9%] top-[24.6%] h-[58.4%] w-[38.5%]">
+            <Photo
+              image={getImage(ph("portrait"))}
+              alt={`Placeholder portrait of ${site.name}`}
+              aspectClassName="h-full w-full"
+              sizes="(min-width: 768px) 22vw, 38vw"
+              priority
+              bw
+            />
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element -- static SVG, no optimisation needed */}
+          <img src="/brand/about-labels.svg" alt="" aria-hidden="true" width={973} height={802} className="pointer-events-none absolute inset-0 h-full w-full" />
+          <figcaption className="sr-only">
+            Me! Art director, pop culture legend, fast learner, travel enthusiast, designer, fashion lover, music
+            connoisseur, and &ldquo;artist&rdquo; (maybe?).
+          </figcaption>
+        </figure>
         {/*
           Adela's handwritten note, traced to a vector (public/brand/about-note.svg, from
           about-note-original.png). The same words are in the sr-only text below so screen
