@@ -38,6 +38,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   // Covers are always shown whole. Tall ones are capped at ~85% of the screen height (and centred),
   // so a portrait image never runs off the screen or gets cropped.
   const coverRatio = p.coverImage.width / p.coverImage.height;
+  const coverIsPortrait = coverRatio < 1;
   // Same for the process strip: landscape galleries (spreads, mockups) get a 4:3 frame.
   const galleryIsLandscape = (p.galleryImages[0]?.width ?? 0) > (p.galleryImages[0]?.height ?? 1);
 
@@ -131,21 +132,36 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
       {/* Title card */}
       <Credits axis="52%" mobileAxis="0%" rows={[{ values: [p.tagline ?? p.role, `${p.title} ${p.year}`] }]} />
 
-      <Credits
-        className="mt-12 md:mt-16"
-        axis="22%"
-        rows={[
-          { label: "Project", values: formatCounter(index + 1, total) },
-          { label: "Role", values: p.role.split(/,\s*/) },
-          ...(p.client ? [{ label: "Client", values: p.client }] : []),
-          { label: "Year", values: String(p.year) },
-          { label: "Tags", values: p.tags },
-        ]}
-      />
+      {/*
+        Credits + cover. Tall (portrait) covers sit beside the credits on desktop, lined up with
+        the title card's axis; wide covers, and everything on phones, go full width below.
+      */}
+      <div className={coverIsPortrait ? "md:grid md:grid-cols-[52%_minmax(0,1fr)] md:items-start md:gap-x-5" : undefined}>
+        <Credits
+          className="mt-12 md:mt-16"
+          // 22% of the page; inside the 52% left column that's ~42%.
+          axis={coverIsPortrait ? "42%" : "22%"}
+          rows={[
+            { label: "Project", values: formatCounter(index + 1, total) },
+            { label: "Role", values: p.role.split(/,\s*/) },
+            ...(p.client ? [{ label: "Client", values: p.client }] : []),
+            { label: "Year", values: String(p.year) },
+            { label: "Tags", values: p.tags },
+          ]}
+        />
 
-      <div className="mt-16 md:mt-24">
-        <div className="mx-auto" style={{ maxWidth: coverRatio < 1 ? `min(100%, calc(85vh * ${coverRatio.toFixed(4)}))` : undefined }}>
-          <Photo image={p.coverImage} alt={p.coverAlt} sizes="(min-width: 1440px) 1392px, 100vw" priority />
+        <div className={coverIsPortrait ? "mt-16 md:mt-16" : "mt-16 md:mt-24"}>
+          <div
+            className={coverIsPortrait ? "mx-auto md:mx-0" : "mx-auto"}
+            style={{ maxWidth: coverIsPortrait ? `min(100%, calc(85vh * ${coverRatio.toFixed(4)}))` : undefined }}
+          >
+            <Photo
+              image={p.coverImage}
+              alt={p.coverAlt}
+              sizes={coverIsPortrait ? "(min-width: 768px) 46vw, 100vw" : "(min-width: 1440px) 1392px, 100vw"}
+              priority
+            />
+          </div>
         </div>
       </div>
 
