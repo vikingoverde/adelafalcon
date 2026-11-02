@@ -19,9 +19,14 @@ export const site = {
   services: ["Capsule & collection design", "Pattern cutting & toiles", "Textile & print design", "Art direction & styling", "Visual identity"],
   tools: ["Pencil, marker, scissors", "Clo3D", "Illustrator & Photoshop", "Figma", "A very old sewing machine"],
   socials: [
-    { label: "Instagram", href: "https://instagram.com/" },
-    { label: "Are.na", href: "https://are.na/" },
-    { label: "LinkedIn", href: "https://linkedin.com/" },
+    { label: "Instagram", handle: "@adelafalcon", href: "https://www.instagram.com/adelafalcon/", icon: "instagram" },
+    { label: "Behance", handle: "behance.net/685910d8", href: "https://www.behance.net/685910d8", icon: "behance" },
+    {
+      label: "LinkedIn",
+      handle: "Adela Falcón",
+      href: "https://www.linkedin.com/in/adela-falcon-a1b15b238/",
+      icon: "linkedin",
+    },
   ],
 } as const;
 

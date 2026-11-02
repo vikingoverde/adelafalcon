@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Credits } from "@/components/ui/Credits";
 import { NameLogo } from "@/components/ui/NameLogo";
 import { Photo } from "@/components/ui/Photo";
+import { SocialIcons } from "@/components/ui/SocialIcons";
 import { getImage, ph } from "@/lib/images";
 import { site } from "@/lib/site";
 
@@ -90,6 +91,10 @@ export default function AboutPage() {
             { label: "In a few words", values: site.adjectives.join(", ") },
           ]}
         />
+        <div className="grid grid-cols-[38%_minmax(0,1fr)] items-center gap-x-3 uppercase md:grid-cols-[52%_minmax(0,1fr)] md:gap-x-5">
+          <p className="text-right text-micro">Find me on</p>
+          <SocialIcons />
+        </div>
         <Credits axis="52%" rows={[{ label: " ", values: `©${site.year} ${site.name}.` }]} />
       </div>
     </div>

@@ -35,7 +35,7 @@ export default function ContactPage() {
             label: s.label,
             values: (
               <a href={s.href} className="underline-offset-4 hover:underline">
-                {s.href.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗
+                {s.handle} ↗
               </a>
             ),
           })),
