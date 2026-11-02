@@ -5,7 +5,10 @@ import { Photo } from "@/components/ui/Photo";
 import { getImage, ph } from "@/lib/images";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = { title: "About", description: `About ${site.name}, ${site.role.toLowerCase()}.` };
+export const metadata: Metadata = {
+  title: "About",
+  description: `${site.name}, a multidisciplinary designer fueled by curiosity and ambition. Born in Zaragoza, raised around the world.`,
+};
 
 export default function AboutPage() {
   return (
@@ -25,18 +28,34 @@ export default function AboutPage() {
         <div className="w-2/3 md:w-full">
           <Photo image={getImage(ph("portrait"))} alt={`Placeholder portrait of ${site.name}`} aspectClassName="aspect-[4/5]" sizes="(min-width: 768px) 20vw, 66vw" priority bw />
         </div>
-        <div className="max-w-[58ch] space-y-4 text-body font-normal md:pl-0">
-          <p>
-            I&rsquo;m a designer and art director who thinks with my hands. Most projects start as a scrap — a torn
-            magazine corner, a fabric offcut, a doodle in the margin — and grow on the wall next to my desk until they
-            become clothes, prints or identities.
-          </p>
-          <p>
-            I studied fashion design, worked in a small knitwear studio, and now run an independent practice making
-            capsule collections and the visual worlds around them.
-          </p>
-          <p>This bio is placeholder text — swap it in app/about/page.tsx.</p>
-        </div>
+        {/*
+          Adela's handwritten note, traced to a vector (public/brand/about-note.svg, from
+          about-note-original.png). The same words are in the sr-only text below so screen
+          readers and search engines can read them.
+        */}
+        <figure className="max-w-[34rem]">
+          {/* eslint-disable-next-line @next/next/no-img-element -- static SVG, no optimisation needed */}
+          <img src="/brand/about-note.svg" alt="" aria-hidden="true" width={481} height={611} className="h-auto w-full" />
+          <figcaption className="sr-only">
+            <p>Hello, I&rsquo;m Adela Falcón, a multidisciplinary designer fueled by curiosity and ambition.</p>
+            <p>
+              I was born in Zaragoza, Spain and raised around the world — learning from new cultures &amp; people (+ being
+              inspired by the vibrant connections between different music, cultures, art, architecture, fashion…).
+            </p>
+            <p>
+              Over the years I started developing little passions, in which I dabble creatively — graphic design, 3D
+              modeling, creative direction, architecture, fashion, photography &amp; many more!
+            </p>
+            <p>
+              My projects are a reflection of my personality and mind. They keep me inspired and evolving. With these
+              projects I&rsquo;m able to express myself through storytelling, emotions, design and experiences.
+            </p>
+            <p>
+              So without further ado… Welcome to my portfolio — a curated glimpse into the complexity that is a
+              human&rsquo;s creative mind.
+            </p>
+          </figcaption>
+        </figure>
       </div>
 
       <div className="mt-24 grid gap-16 md:mt-32 md:gap-24">
