@@ -48,34 +48,29 @@ export default function AboutPage() {
             connoisseur, and &ldquo;artist&rdquo; (maybe?).
           </figcaption>
         </figure>
-        {/*
-          Adela's handwritten note, traced to a vector (public/brand/about-note.svg, from
-          about-note-original.png). The same words are in the sr-only text below so screen
-          readers and search engines can read them.
-        */}
-        <figure className="max-w-[34rem]">
-          {/* eslint-disable-next-line @next/next/no-img-element -- static SVG, no optimisation needed */}
-          <img src="/brand/about-note.svg" alt="" aria-hidden="true" width={481} height={611} className="h-auto w-full" />
-          <figcaption className="sr-only">
-            <p>Hello, I&rsquo;m Adela Falcón, a multidisciplinary designer fueled by curiosity and ambition.</p>
+        <div className="max-w-[56ch] space-y-5 md:pt-6">
+          <p className="text-credit uppercase">
+            Hello, I&rsquo;m Adela Falcón, a multidisciplinary designer fueled by curiosity and ambition.
+          </p>
+          <div className="space-y-4 text-body font-normal">
             <p>
-              I was born in Zaragoza, Spain and raised around the world — learning from new cultures &amp; people (+ being
-              inspired by the vibrant connections between different music, cultures, art, architecture, fashion…).
+              I was born in Zaragoza, Spain and raised around the world — learning from new cultures and people, and
+              inspired by the vibrant connections between different music, cultures, art, architecture and fashion.
             </p>
             <p>
-              Over the years I started developing little passions, in which I dabble creatively — graphic design, 3D
-              modeling, creative direction, architecture, fashion, photography &amp; many more!
+              Over the years I started developing little passions in which I dabble creatively: graphic design, 3D
+              modeling, creative direction, architecture, fashion, photography and many more.
             </p>
             <p>
-              My projects are a reflection of my personality and mind. They keep me inspired and evolving. With these
-              projects I&rsquo;m able to express myself through storytelling, emotions, design and experiences.
+              My projects are a reflection of my personality and mind. They keep me inspired and evolving, and through
+              them I express myself with storytelling, emotions, design and experiences.
             </p>
             <p>
-              So without further ado… Welcome to my portfolio — a curated glimpse into the complexity that is a
+              So without further ado… welcome to my portfolio — a curated glimpse into the complexity that is a
               human&rsquo;s creative mind.
             </p>
-          </figcaption>
-        </figure>
+          </div>
+        </div>
       </div>
 
       <div className="mt-24 grid gap-16 md:mt-32 md:gap-24">
