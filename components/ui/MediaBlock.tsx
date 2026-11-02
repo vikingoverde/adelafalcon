@@ -4,11 +4,26 @@ import { FlipBook } from "./FlipBook";
 import { YouTube } from "./YouTube";
 
 /** One image, GIF, video or "to come" frame, cropped to `aspect` unless it's a video. */
-function Item({ item, aspect, sizes, label }: { item: ResolvedMediaItem; aspect: string; sizes: string; label?: string }) {
+function Item({
+  item,
+  aspect,
+  ratio,
+  sizes,
+  label,
+}: {
+  item: ResolvedMediaItem;
+  aspect: string;
+  /** Overrides `aspect` with an exact ratio such as "2/3". */
+  ratio?: string;
+  sizes: string;
+  label?: string;
+}) {
+  const shape = ratio ? { aspectRatio: ratio } : undefined;
+  if (ratio) aspect = "";
   return (
     <figure>
       {item.kind === "image" ? (
-        <div className={`relative overflow-hidden bg-paper-deep ${aspect}`}>
+        <div className={`relative overflow-hidden bg-paper-deep ${aspect}`} style={shape}>
           <Image
             src={item.image.src}
             alt={item.alt}
@@ -26,6 +41,7 @@ function Item({ item, aspect, sizes, label }: { item: ResolvedMediaItem; aspect:
           src={item.src}
           aria-label={item.alt}
           className={`w-full bg-paper-deep object-cover ${aspect}`}
+          style={shape}
           autoPlay
           muted
           loop
@@ -33,7 +49,7 @@ function Item({ item, aspect, sizes, label }: { item: ResolvedMediaItem; aspect:
           preload="metadata"
         />
       ) : (
-        <div className={`flex items-center justify-center border border-dashed border-red/40 ${aspect}`}>
+        <div className={`flex items-center justify-center border border-dashed border-red/40 ${aspect}`} style={shape}>
           <span className="px-3 text-center text-micro uppercase">(To come)</span>
         </div>
       )}
@@ -52,14 +68,17 @@ export function MediaBlock({ block, projectTitle }: { block: ResolvedMediaBlock;
       return items[0] ? (
         <Item item={items[0]} aspect="aspect-[4/3]" sizes="(min-width: 768px) 62vw, 100vw" label={block.caption} />
       ) : null;
-    case "row":
+    case "row": {
+      const cols = { 2: "grid-cols-2 md:max-w-[40rem]", 3: "grid-cols-3", 4: "grid-cols-2 sm:grid-cols-4" }[block.columns ?? 3] ?? "grid-cols-3";
+      const n = block.columns ?? 3;
       return (
-        <div className="grid grid-cols-3 gap-2 md:gap-4">
+        <div className={`grid gap-2 md:gap-4 ${cols}`}>
           {items.map((it, i) => (
-            <Item key={i} item={it} aspect="aspect-[3/4]" sizes="(min-width: 768px) 20vw, 32vw" />
+            <Item key={i} item={it} aspect="aspect-[3/4]" ratio={block.ratio} sizes={`(min-width: 768px) ${Math.round(60 / n)}vw, ${Math.round(96 / Math.min(n, 2))}vw`} />
           ))}
         </div>
       );
+    }
     case "feature": {
       const [first, ...rest] = items;
       return (

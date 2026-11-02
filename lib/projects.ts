@@ -27,6 +27,10 @@ export type MediaBlockInput = {
   youtube?: string;
   title?: string;
   caption?: string;
+  /** row layout: number of columns (2–4, default 3). */
+  columns?: number;
+  /** Frame shape for row items, e.g. "2/3" (default 3/4). */
+  ratio?: string;
 };
 export type ResolvedMediaItem =
   | { kind: "image"; image: ImageData; alt: string; caption?: string }
@@ -119,6 +123,8 @@ function parseFrontmatter(file: string, data: Record<string, unknown>): ProjectF
         youtube: typeof b.youtube === "string" ? b.youtube : undefined,
         title: typeof b.title === "string" ? b.title : undefined,
         caption: typeof b.caption === "string" ? b.caption : undefined,
+        columns: typeof b.columns === "number" ? b.columns : undefined,
+        ratio: typeof b.ratio === "string" ? b.ratio : undefined,
       };
     }
   }
