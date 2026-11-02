@@ -35,8 +35,9 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   const data = await getProject((await params).slug);
   if (!data) notFound();
   const { project: p, index, total, prev, next } = data;
-  // Landscape covers (e.g. a mockup photographed flat) are shown whole; portrait ones are cropped to a wide frame.
-  const coverIsLandscape = p.coverImage.width > p.coverImage.height;
+  // Covers are always shown whole. Tall ones are capped at ~85% of the screen height (and centred),
+  // so a portrait image never runs off the screen or gets cropped.
+  const coverRatio = p.coverImage.width / p.coverImage.height;
   // Same for the process strip: landscape galleries (spreads, mockups) get a 4:3 frame.
   const galleryIsLandscape = (p.galleryImages[0]?.width ?? 0) > (p.galleryImages[0]?.height ?? 1);
 
@@ -143,7 +144,9 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
       />
 
       <div className="mt-16 md:mt-24">
-        <Photo image={p.coverImage} alt={p.coverAlt} aspectClassName={coverIsLandscape ? undefined : "aspect-[4/5] md:aspect-[16/8]"} sizes="(min-width: 1440px) 1392px, 100vw" priority />
+        <div className="mx-auto" style={{ maxWidth: coverRatio < 1 ? `min(100%, calc(85vh * ${coverRatio.toFixed(4)}))` : undefined }}>
+          <Photo image={p.coverImage} alt={p.coverAlt} sizes="(min-width: 1440px) 1392px, 100vw" priority />
+        </div>
       </div>
 
       <div className="mt-16 grid grid-cols-1 gap-y-4 md:mt-24 md:grid-cols-[30%_minmax(0,1fr)] md:gap-x-5 md:gap-y-7">
