@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { nav, site } from "@/lib/site";
+import { NameLogo } from "./NameLogo";
 
 function sectionLabel(pathname: string) {
   if (pathname === "/") return "Index";
@@ -23,9 +24,9 @@ export function SiteHeader() {
       >
         Skip to content
       </a>
-      <nav aria-label="Main" className="sheet grid grid-cols-[1fr_auto] items-baseline py-3 text-nav uppercase md:grid-cols-3">
-        <Link href="/" className="justify-self-start hover:underline hover:underline-offset-4">
-          {site.name}
+      <nav aria-label="Main" className="sheet grid grid-cols-[1fr_auto] items-center py-2.5 text-nav uppercase md:grid-cols-3">
+        <Link href="/" aria-label={`${site.name} — home`} className="justify-self-start text-ink transition-opacity hover:opacity-70">
+          <NameLogo title="" className="h-7 w-auto md:h-8" />
         </Link>
         <p aria-hidden="true" className="hidden justify-self-center md:block">
           ({sectionLabel(pathname)})

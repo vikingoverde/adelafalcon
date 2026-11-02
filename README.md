@@ -25,6 +25,7 @@ npm run build && npm start
 | About page bio and portrait | `app/about/page.tsx` |
 | Home page credits block | `app/page.tsx` |
 | The hand-lettered name | `components/ui/NameLogo.tsx` (traced from `public/brand/name-original.png`) |
+| Tab icon and home-screen icon | generated from the logo by `node scripts/make-icons.mjs` → `app/icon.svg`, `app/apple-icon.png` |
 
 ```
 app/                     routes
