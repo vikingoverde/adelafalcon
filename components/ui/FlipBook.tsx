@@ -120,6 +120,17 @@ export function FlipBook({ pages, title }: Props) {
             <Page item={underRight} n={2 * (flip?.dir === "next" ? spread + 1 : spread) + 1} sizes={sizes} />
           </button>
 
+          {/* Preload the pages either side of this spread, so a turning page is never a blur. */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-0">
+            {[left(spread + 1), right(spread + 1), left(spread - 1), right(spread - 1)].map((item, i) =>
+              item && item.kind === "image" ? (
+                <div key={`${spread}-${i}`} className="absolute inset-y-0 left-0 w-1/2">
+                  <Page item={item} n={0} sizes={sizes} />
+                </div>
+              ) : null,
+            )}
+          </div>
+
           {/* The turning leaf */}
           {flip && (
             <div
