@@ -44,7 +44,7 @@ export default function AboutPage() {
           {/* eslint-disable-next-line @next/next/no-img-element -- static SVG, no optimisation needed */}
           <img src="/brand/about-labels.svg" alt="" aria-hidden="true" width={973} height={802} className="pointer-events-none absolute inset-0 h-full w-full" />
           <figcaption className="sr-only">
-            Me! Art director, pop culture legend, fast learner, travel enthusiast, designer, fashion lover, music
+            Art director, pop culture legend, fast learner, travel enthusiast, designer, fashion lover, music
             connoisseur, and &ldquo;artist&rdquo; (maybe?).
           </figcaption>
         </figure>
